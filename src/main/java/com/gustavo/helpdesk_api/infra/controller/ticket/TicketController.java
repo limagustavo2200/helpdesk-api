@@ -14,6 +14,9 @@ import com.gustavo.helpdesk_api.infra.controller.ticket.dto.CreateTicketRequestD
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -64,14 +67,17 @@ public class TicketController {
    }
 
    @GetMapping
-   public ResponseEntity<List<TicketOutputDto>> findAll(
-      @RequestParam(required = false) List<UUID> statusIds
+   public ResponseEntity<Page<TicketOutputDto>> findAll(
+      @RequestParam(required = false) List<UUID> statusIds,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "20") int size
    ) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       JwtPayload jwt = (authentication != null)
          ? (JwtPayload) authentication.getPrincipal()
          : new JwtPayload(null, null, null, "admin");
-      var tickets = findAllTicketsUseCase.execute(statusIds, jwt);
+      Pageable pageable = PageRequest.of(page, size);
+      var tickets = findAllTicketsUseCase.execute(statusIds, jwt, pageable);
       return ResponseEntity.status(HttpStatus.OK).body(tickets);
    }
 

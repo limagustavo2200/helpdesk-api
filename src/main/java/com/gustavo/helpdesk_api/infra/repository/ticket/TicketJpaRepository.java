@@ -1,6 +1,8 @@
 package com.gustavo.helpdesk_api.infra.repository.ticket;
 
 import com.gustavo.helpdesk_api.core.entity.Ticket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,7 +23,7 @@ public interface TicketJpaRepository extends JpaRepository<Ticket, UUID> {
           "LEFT JOIN FETCH t.assignee " +
           "LEFT JOIN FETCH t.tiSector " +
           "WHERE t.status.id IN :statusIds")
-   List<Ticket> findByStatusIdIn(@Param("statusIds") List<UUID> statusIds);
+   Page<Ticket> findByStatusIdIn(@Param("statusIds") List<UUID> statusIds, Pageable pageable);
 
    @Query("SELECT t FROM Ticket t " +
           "JOIN FETCH t.status " +
@@ -32,5 +34,5 @@ public interface TicketJpaRepository extends JpaRepository<Ticket, UUID> {
           "LEFT JOIN FETCH t.tiSector " +
           "WHERE t.requester.email = :email " +
           "AND t.status.id IN :statusIds")
-   List<Ticket> findByRequesterEmailAndStatusIdIn(@Param("email") String email, @Param("statusIds") List<UUID> statusIds);
-}
+   Page<Ticket> findByRequesterEmailAndStatusIdIn(@Param("email") String email, @Param("statusIds") List<UUID> statusIds, Pageable pageable);
+}1

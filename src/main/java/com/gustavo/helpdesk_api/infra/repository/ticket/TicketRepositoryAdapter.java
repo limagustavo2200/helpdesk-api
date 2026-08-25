@@ -2,6 +2,8 @@ package com.gustavo.helpdesk_api.infra.repository.ticket;
 
 import com.gustavo.helpdesk_api.core.entity.Ticket;
 import com.gustavo.helpdesk_api.core.gateway.repository.TicketRepositoryGateway;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,14 +35,13 @@ public class TicketRepositoryAdapter implements TicketRepositoryGateway {
         return jpaRepository.findByTicketNumber(ticketNumber);
     }
 
-
     @Override
-    public List<Ticket> findByStatusId(List<UUID> statusIds) {
-      return jpaRepository.findByStatusIdIn(statusIds);
+    public Page<Ticket> findByStatusId(List<UUID> statusIds, Pageable pageable) {
+        return jpaRepository.findByStatusIdIn(statusIds, pageable);
     }
 
-   @Override
-   public List<Ticket> findByEmailAndStatusId(String email, List<UUID> statusIds) {
-      return jpaRepository.findByRequesterEmailAndStatusIdIn(email, statusIds);
-   }
+    @Override
+    public Page<Ticket> findByEmailAndStatusId(String email, List<UUID> statusIds, Pageable pageable) {
+        return jpaRepository.findByRequesterEmailAndStatusIdIn(email, statusIds, pageable);
+    }
 }

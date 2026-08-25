@@ -1,6 +1,8 @@
 package com.gustavo.helpdesk_api.core.gateway.repository;
 
 import com.gustavo.helpdesk_api.core.entity.Ticket;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,8 +16,8 @@ public interface TicketRepositoryGateway {
 
    Optional<Ticket> findByTicketNumber(Integer ticketNumber);
 
-   List<Ticket> findByStatusId(List<UUID> statusIds);
+   Page<Ticket> findByStatusId(List<UUID> statusIds, Pageable pageable);
 
-   List<Ticket> findByEmailAndStatusId(String email, List<UUID> statusIds);
+   Page<Ticket> findByEmailAndStatusId(String email, List<UUID> statusIds, Pageable pageable);
 
 }
