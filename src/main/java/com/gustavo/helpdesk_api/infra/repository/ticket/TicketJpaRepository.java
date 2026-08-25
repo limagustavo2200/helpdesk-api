@@ -35,4 +35,4 @@ public interface TicketJpaRepository extends JpaRepository<Ticket, UUID> {
           "WHERE t.requester.email = :email " +
           "AND t.status.id IN :statusIds")
    Page<Ticket> findByRequesterEmailAndStatusIdIn(@Param("email") String email, @Param("statusIds") List<UUID> statusIds, Pageable pageable);
-}1
+}
