@@ -73,7 +73,7 @@ public class TicketController {
       @RequestParam(defaultValue = "20") int size
    ) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      JwtPayload jwt = (authentication != null)
+      JwtPayload jwt = (authentication != null && authentication.getPrincipal() instanceof JwtPayload)
          ? (JwtPayload) authentication.getPrincipal()
          : new JwtPayload(null, null, null, "admin");
       Pageable pageable = PageRequest.of(page, size);
