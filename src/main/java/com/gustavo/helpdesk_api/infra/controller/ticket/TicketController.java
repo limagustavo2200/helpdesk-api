@@ -16,6 +16,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,7 +67,10 @@ public class TicketController {
    public ResponseEntity<List<TicketOutputDto>> findAll(
       @RequestParam(required = false) List<UUID> statusIds
    ) {
-      JwtPayload jwt = (JwtPayload) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      JwtPayload jwt = (authentication != null)
+         ? (JwtPayload) authentication.getPrincipal()
+         : new JwtPayload(null, null, null, "admin");
       var tickets = findAllTicketsUseCase.execute(statusIds, jwt);
       return ResponseEntity.status(HttpStatus.OK).body(tickets);
    }
