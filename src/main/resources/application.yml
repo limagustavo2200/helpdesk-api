@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: helpdesk-api
+
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/helpdesk_db?createDatabaseIfNotExist=true&serverTimezone=UTC}
+    username: ${DB_USERNAME:helpdesk}
+    password: ${DB_PASSWORD:helpdesk}
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      idle-timeout: 30000
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: 8080
+
+azure:
+  client-id: ${AZURE_CLIENT_ID}
+  client-secret: ${AZURE_CLIENT_SECRET}
+  tenant-id: ${AZURE_TENANT_ID}
+  redirect-uri: ${AZURE_REDIRECT_URI}
+  graph-uri: 'https://graph.microsoft.com/v1.0/me?$select=displayName,givenName,surname,jobTitle,mail,department,officeLocation'
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  expiration: 21600000
+
+security:
+  enabled: ${SECURITY_ENABLED:true}
+
+api:
+  email-service:
+    url: ${API_EMAIL_SERVICE_URL}
+    secret: ${API_EMAIL_SERVICE_SECRET}
+
+  teams:
+    webhook:
+      url: ${API_TEAMS_WEBHOOK_URL}
+
+frontend:
+  url: ${FRONTEND_URL}
+
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:false}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:false}
